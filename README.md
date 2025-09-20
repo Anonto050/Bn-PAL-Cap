@@ -1,17 +1,21 @@
-# Bn-PAL-Cap: Bengali Image Captioning with Patch Alignment Loss
+# Align Where the Words Look: Cross-Attention-Guided Patch Alignment with Contrastive and Transport Regularization for Bengali Captioning
 
 ## Description
 
-Bn-PAL-Cap is a comprehensive pipeline for Bengali image captioning that leverages Patch Alignment Loss (PAL) to improve caption generation quality. The project implements a novel approach combining:
+This repo hosts the official implementation of our Bengali captioning pipeline built around a tri-loss objective: Patch-Alignment Loss (PAL) + InfoNCE + Sinkhorn-based Optimal Transport (OT). PAL reuses decoder cross-attention to pool caption-relevant patches and align real–synthetic evidence; InfoNCE adds global instance discrimination between pooled real/synthetic features; OT enforces balanced, fine-grained patch correspondences under the same text weights. The result is stronger grounding and more accurate Bengali captions under limited supervision.
 
-- **Translation Pipeline**: Automated English-to-Bengali caption translation with semantic validation using LaBSE
-- **Synthetic Image Generation**: Creating synthetic Bengali-captioned images using Kandinsky 2.1
-- **Advanced Architecture**: MaxViT vision encoder + mBART decoder with split decoder attention
-- **Patch Alignment Loss (PAL)**: Novel loss function that aligns real and synthetic image patches using cross-attention weights
-- **Multi-scale Training**: Progressive unfreezing and multi-scale feature alignment
-- **Comprehensive Evaluation**: BLEU, METEOR, CIDEr, ROUGE-L, and BERTScore metrics
+The project integrates:
 
-The system addresses the challenge of limited Bengali image-caption datasets by leveraging synthetic data generation and advanced alignment techniques to improve model performance.
+* Translation pipeline: automated English→Bengali captioning with LaBSE validation
+* Synthetic image generation: bilingual prompts with Kandinsky 2.1 to pair each caption with a synthetic image
+* Architecture: frozen MaxViT vision encoder + linear+LayerNorm bridge + mBART-50 Bengali decoder
+* Patch-Alignment Loss (PAL): cross-attention–guided real↔synthetic alignment at caption-attended patches
+* Contrastive and transport regularization: InfoNCE for global margins; entropic OT for fine-grained patch matching
+* Multi-scale training: progressive decoder unfreezing and optional multi-scale PAL
+* Evaluation: BLEU (B1–B4), METEOR, CIDEr, ROUGE-L, and BERTScore
+
+The system addresses scarce Bengali image–text pairs by coupling synthetic data with text-conditioned alignment, improving both lexical precision and semantic faithfulness.
+
 
 ## Execution Flow
 
@@ -35,7 +39,7 @@ The pipeline consists of 5 sequential stages:
 - Pairs real COCO images with synthetic images
 - Trains MaxViT + mBART model with PAL
 - Implements progressive unfreezing schedule
-- Optional InfoNCE and Optimal Transport losses
+- PAL, InfoNCE and Optimal Transport losses
 - Outputs: `maxvit_mbart_bn_checkpoint.pt`
 
 ### Stage 4: PAL Analysis (`stage-4-pal-analysis.ipynb`)
