@@ -128,7 +128,7 @@ The pipeline consists of 5 sequential stages:
 # 2. Configure training parameters:
 BATCH_SIZE = 16
 GRAD_ACCUM_STEPS = 4
-NUM_EPOCHS = 3  # or 7 for full training
+NUM_EPOCHS = 6
 INITIAL_PATCH_ALIGNMENT_WEIGHT = 0.5
 
 # 3. Run training cells
